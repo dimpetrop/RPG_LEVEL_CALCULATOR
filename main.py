@@ -6,15 +6,15 @@ def simulation():
   with open("simulation_results.txt", "w") as f:
     for i in range(1,1001):
       PLAYERS_COMPLETED = randrange(1,1000)
-      PLAYERS_IN_ZONE_NOW = randrange(1,200)
+      PLAYERS_IN_ZONE_NOW = randrange(1,100)
       PLAYERS_COMPLETED_AVG_LEVEL = randrange(1,100)
       PLAYER_LVL = randrange(1,100)
-      ZONE_LEVEL = 30
+      ZONE_LEVEL = randrange(1,30)
 
       FACTOR_1 = PLAYERS_COMPLETED / PLAYERS_IN_ZONE_NOW
-      FACTOR_2 = PLAYERS_COMPLETED_AVG_LEVEL
-      FACTOR_3 = PLAYER_LVL - ZONE_LEVEL
-      DIFFICULTY = int(FACTOR_1 + FACTOR_2 - FACTOR_3)
+      FACTOR_2 = PLAYERS_COMPLETED_AVG_LEVEL * 0.5
+      FACTOR_3 = abs((PLAYER_LVL - ZONE_LEVEL) * 2)
+      DIFFICULTY = int(FACTOR_1 - FACTOR_2 - FACTOR_3)
 
       if DIFFICULTY < 0:
         DIFFICULTY *= -1
@@ -60,7 +60,7 @@ def calculate_values(option):
       low += 1
     if i > 50:
       high +=1
-  avg = sum // c
+  avg = sum / c
   return [avg, low, mid, high]
 
 def count(option):
@@ -82,6 +82,7 @@ def count(option):
       print("Count of difficulties < 25", array[1]) 
       if all:
         option = 2
+      return
     if option == 2:
       array = calculate_values(2)
       print("\nAverage Player LVL based on Simulation", array[0], "")
@@ -90,12 +91,16 @@ def count(option):
       print("Count of Player LVL < 25", array[1]) 
       if all:
         option = 0
+      return
 
 
 
 #Program Start
 while True:
   option = int(input("\n\nSimulation [1]\nCount [2]\n"))
+  while option not in range(0,3):
+    print("\nIncorrect Input")
+    option = int(input("\n\nSimulation [1]\nCount [2]\n"))
 
   if option == 1:
     simulation()
@@ -104,7 +109,3 @@ while True:
   elif option == 0:
     print("Exiting...")
     break
-  else:
-    while option not in range(1,3):
-      print("\nIncorrect Input")
-      option = int(input("\n\nSimulation [1]\nCount [2]\n"))
