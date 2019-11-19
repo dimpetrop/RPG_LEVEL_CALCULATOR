@@ -60,24 +60,36 @@ def calculate_values(option):
       low += 1
     if i > 50:
       high +=1
-  avg = sum / c
+  avg = sum // c
   return [avg, low, mid, high]
 
 def count(option):
-  if option == 1:
-    print("Option 1: difficulties")  #DEBUG
-    array = calculate_values(1)
-    print("Average Difficulty LVL based on Simulation", array[0], "")
-    print("Count of difficulties > 50", array[3])
-    print("Count of difficulties 25 - 50", array[2])
-    print("Count of difficulties < 25", array[1]) 
-  if option == 2:
-    print("Option 2: player lvl")  #DEBUG
-    array = calculate_values(2)
-    print("Average Player LVL based on Simulation", array[0], "")
-    print("Count of Player LVL > 50", array[3])
-    print("Count of Player LVL 25 - 50", array[2])
-    print("Count of Player LVL < 25", array[1]) 
+  all = False
+
+  while True:
+
+    if option == 3:
+      option = 1
+      all =  True
+    if option == 0:
+      return
+    
+    if option == 1:
+      array = calculate_values(1)
+      print("\nAverage Difficulty LVL based on Simulation", array[0], "")
+      print("Count of difficulties > 50", array[3])
+      print("Count of difficulties 25 - 50", array[2])
+      print("Count of difficulties < 25", array[1]) 
+      if all:
+        option = 2
+    if option == 2:
+      array = calculate_values(2)
+      print("\nAverage Player LVL based on Simulation", array[0], "")
+      print("Count of Player LVL > 50", array[3])
+      print("Count of Player LVL 25 - 50", array[2])
+      print("Count of Player LVL < 25", array[1]) 
+      if all:
+        option = 0
 
 
 
@@ -88,7 +100,7 @@ while True:
   if option == 1:
     simulation()
   elif option == 2:
-    count(int(input("\nCount of Difficulties [1]\nCount of Player LVL [2]\n")))
+    count(int(input("\nCount of Difficulties [1]\nCount of Player LVL [2]\nAll [3]\n")))
   elif option == 0:
     print("Exiting...")
     break
