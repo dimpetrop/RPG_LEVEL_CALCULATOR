@@ -20,7 +20,7 @@ def simulation():
         DIFFICULTY *= -1
       if DIFFICULTY == 0:
         DIFFICULTY = 25
-      f.write("\n\nSIMULATION "+ str(i) + " RESULTS " + "DIFFICULTY =" + str(DIFFICULTY) + "\nPlayers Completed " + str(PLAYERS_COMPLETED) + "\nPlayers in zone now "+ str(PLAYERS_IN_ZONE_NOW) + "\nAverage Player LVL " + str(PLAYERS_COMPLETED_AVG_LEVEL) + "\nPlayer LVL "+ str(PLAYER_LVL) + "\nZone Level " + str(ZONE_LEVEL))
+      f.write("\n\nSIMULATION "+ str(i) + " RESULTS " + "DIFFICULTY =" + str(DIFFICULTY) + "\nPlayers Completed " + str(PLAYERS_COMPLETED) + "\nPlayers in zone now "+ str(PLAYERS_IN_ZONE_NOW) + "\nAverage Player LVL " + str(PLAYERS_COMPLETED_AVG_LEVEL) + "\nPlayer LVL +"+ str(PLAYER_LVL) + "\nZone Level " + str(ZONE_LEVEL))
   print("Simulation Completed")
 
 def find_difficulties():
@@ -32,44 +32,67 @@ def find_difficulties():
         array.append(int(toappend))
     return array
 
-def count(option):
+def find_player_level():
+  array = []
+  with open("simulation_results.txt", "r") as f:
+    for line in f:
+      if "+" in line:
+        toappend = line[len(line)-4:len(line)-1].replace("+", "")
+        array.append(int(toappend))
+  return array
 
+def calculate_values(option):
+  c = 1
+  sum = mid = low = high = 0
   if option == 1:
-    c = 0
-    sum = mid = low = high = 0
-    for i in find_difficulties():
-      c += 1
-      sum += i
+    #print("Option 1: difficulties (calculate_values)")  #DEBUG
+    array = find_difficulties()
+  else:
+    #print("Option 2: player lvl (calculate_values)")  #DEBUG
+    array = find_player_level()
+  for i in array:
+    c += 1
+    sum += i
 
-      if 25 < i < 50:
-        mid += 1
-      if i < 25:
-        low += 1
-      if i > 50:
-        high +=1
+    if 25 < i < 50:
+      mid += 1
+    if i < 25:
+      low += 1
+    if i > 50:
+      high +=1
+  avg = sum / c
+  return [avg, low, mid, high]
 
-
-    avg = sum / c
-    print("Average Difficulty LVL based on Simulation", avg, "")
-    print("Count of difficulties > 50", high)
-    print("Count of difficulties 25 - 50", mid)
-    print("Count of difficulties < 25", low) 
+def count(option):
+  if option == 1:
+    print("Option 1: difficulties")  #DEBUG
+    array = calculate_values(1)
+    print("Average Difficulty LVL based on Simulation", array[0], "")
+    print("Count of difficulties > 50", array[3])
+    print("Count of difficulties 25 - 50", array[2])
+    print("Count of difficulties < 25", array[1]) 
   if option == 2:
-    pass
+    print("Option 2: player lvl")  #DEBUG
+    array = calculate_values(2)
+    print("Average Player LVL based on Simulation", array[0], "")
+    print("Count of Player LVL > 50", array[3])
+    print("Count of Player LVL 25 - 50", array[2])
+    print("Count of Player LVL < 25", array[1]) 
+
 
 
 #Program Start
 while True:
-  option = int(input("\n\nSimulation or Avg (choose 1 or 2)"))
+  option = int(input("\n\nSimulation [1]\nCount [2]\n"))
 
   if option == 1:
     simulation()
   elif option == 2:
-    count(1)
+    count(int(input("\nCount of Difficulties [1]\nCount of Player LVL [2]\n")))
   elif option == 0:
     print("Exiting...")
     break
   else:
     while option not in range(1,3):
-      print("Incorrect Input")
-      option = input("Simulation or Count (choose 1 or 2)")
+      print("\nIncorrect Input")
+      option = int(input("\n\nSimulation [1]\nCount [2]\n"))
